@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>春日寻宝之旅</title>
     <style>
-        /* 基础重置 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* 优化后的样式 */
+        :root {
+            --primary: #ff6b6b;
+            --secondary: #ff9f43;
+            --accent: #54a0ff;
         }
 
-        /* 容器样式 */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
+                       "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
             background: linear-gradient(135deg, #fff1eb 0%, #ace0f9 100%);
             min-height: 100vh;
             display: flex;
@@ -28,17 +28,17 @@
             border-radius: 20px;
             padding: 2rem;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            width: 100%;
             max-width: 500px;
+            width: 90%;
+            text-align: center;
         }
 
-        /* 标题样式 */
         h1 {
-            color: #e74c3c;
+            color: var(--primary);
             font-size: 1.8rem;
-            text-align: center;
             margin-bottom: 1.5rem;
             position: relative;
+            
         }
 
         h1::after {
@@ -46,19 +46,12 @@
             display: block;
             width: 60px;
             height: 3px;
-            background: #FFB3C6;
+            background: var(--accent);
             margin: 1rem auto;
         }
-         p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            color: #e74c3c;
-            position: relative;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-        }
 
-        /* 按钮样式 */
-        #startButton {
+        /* 按钮样式优化 */
+        .btn {
             background: linear-gradient(135deg, #FFB3C6, #C8E6C9);
             color: white;
             padding: 1rem 2rem;
@@ -73,118 +66,159 @@
             transition: transform 0.2s;
         }
 
-        /* 模态框样式 */
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* 模态框优化 */
         .modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            padding: 20px;
+            justify-content: center;
+            align-items: center;
             z-index: 1000;
         }
 
         .modal-content {
             background: white;
             border-radius: 20px;
-            padding: 1.5rem;
+            padding: 2rem;
+            width: 90%;
             max-width: 400px;
-            margin: 20px auto;
             position: relative;
+            animation: modalShow 0.3s ease;
         }
 
-        /* 文件上传样式 */
+        @keyframes modalShow {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* 文件上传优化 */
         .file-upload {
-            border: 2px dashed #FFB3C6;
+            border: 2px dashed var(--accent);
             border-radius: 15px;
             padding: 1.5rem;
             margin: 1.5rem 0;
-            text-align: center;
+            transition: 0.3s;
         }
 
-        .file-upload label {
-            color: #e74c3c;
-            border: none;
-            font-weight: 500;
+        .file-upload:hover {
+            background: rgba(84, 160, 255, 0.1);
+        }
+
+        .upload-label {
+            color: var(--primary);
             display: block;
             cursor: pointer;
+            padding: 8px;
         }
 
-        .unlock-button {
-            background: #FFB3C6;
-            color: white;
-            border: none;
-            border-radius: 15px;
-            padding: 1rem;
-            width: 100%;
-            margin-top: 1rem;
-            cursor: pointer;
+        /* 进度指示器 */
+        .progress {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 1rem 0;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            transition: 0.3s;
+        }
+
+        .progress-dot.active {
+            background: var(--primary);
+            transform: scale(1.2);
         }
     </style>
 </head>
 <body>
-    <!-- 主容器 -->
     <div class="container">
         <h1>🌸 春日寻宝计划 🌸</h1>
-             <p> 亲爱的今天头油了嘛女士，你收到了一个神秘的寻宝邀请！<br>点击开始，跟随线索，发现隐藏的惊喜吧！</p>
-        <button id="startButton">开启礼物</button>
+        <p>亲爱的今天头油了嘛女士，你收到了一个神秘的寻宝邀请！<br>点击开始，跟随线索，发现隐藏的惊喜吧！</p>
+        <button class="btn" id="startButton">开启礼物</button>
     </div>
 
     <!-- 第1关 -->
-    <div id="modal1" class="modal">
+    <div class="modal" id="modal1">
         <div class="modal-content">
-            <h1>🌸 第一关 🌸</h1>
-            
-            <p>在广西外国语学院附近的（遇见Sweet smile_五合店），有一份特别的礼物在等你，礼物兑换码是0204 1405 0532。4.7号到期哦！</p>
-            <div class="file-upload">
-                <input type="file" id="fileInput1" accept="image/*">
-                <label for="fileInput1">上传礼物照片</label>
+            <div class="progress">
+                <div class="progress-dot active"></div>
+                <div class="progress-dot"></div>
+                <div class="progress-dot"></div>
             </div>
-            <button id="unlockButton1" class="unlock-button" onclick="goToNextClue(2)">解锁下一关</button>
+            <h1>🌸 第一关 🌸</h1>
+            <p>在广西外国语学院附近的（遇见Sweet smile_五合店），有一份特别的礼物在等你，礼物兑换码是<strong>0204 1405 0532</strong>。4.7号到期哦！</p>
+            <div class="file-upload">
+                <input type="file" id="fileInput1" accept="image/*" hidden>
+                <label for="fileInput1" class="upload-label">📸 上传礼物照片</label>
+            </div>
+            <button class="btn" id="unlockButton1" disabled>验证中...</button>
         </div>
     </div>
 
     <!-- 第2关 -->
-    <div id="modal2" class="modal">
+    <div class="modal" id="modal2">
         <div class="modal-content">
-            <h1>🌸 第二关 🌸</h1>
-            <p>太棒了！接下来去学校附近的奶茶店（古茗），有一份特别的礼物在等你，礼物兑换码是0204 8203 0430。3.15号到期哦！</p>
-            <div class="file-upload">
-                <input type="file" id="fileInput2" accept="image/*">
-                <label for="fileInput2">上传奶茶照片</label>
+            <div class="progress">
+                <div class="progress-dot active"></div>
+                <div class="progress-dot active"></div>
+                <div class="progress-dot"></div>
             </div>
-            <button id="unlockButton2" class="unlock-button" onclick="goToNextClue(3)">解锁下一关</button>
+            <h1>🌸 第二关 🌸</h1>
+            <p>太棒了！接下来去学校附近的奶茶店（古茗），有一份特别的礼物在等你，礼物兑换码是<strong>0204 8203 0430</strong>。3.15号到期哦！</p>
+            <div class="file-upload">
+                <input type="file" id="fileInput2" accept="image/*" hidden>
+                <label for="fileInput2" class="upload-label">🥤 上传奶茶照片</label>
+            </div>
+            <button class="btn" id="unlockButton2" disabled>验证中...</button>
         </div>
     </div>
 
     <!-- 第3关 -->
-    <div id="modal3" class="modal">
+    <div class="modal" id="modal3">
         <div class="modal-content">
-            <h1>🌸 第三关 🌸</h1>
-            <p>最后一步啦！去学校附近的糖水店（君记甜铺-糖水-小吃-简食），礼物兑换码是0211 6337 8191。4.7号到期哦</p>
-            <div class="file-upload">
-                <input type="file" id="fileInput3" accept="image/*">
-                <label for="fileInput3">上传糖水照片</label>
+            <div class="progress">
+                <div class="progress-dot active"></div>
+                <div class="progress-dot active"></div>
+                <div class="progress-dot active"></div>
             </div>
-            <button id="unlockButton3" class="unlock-button" onclick="goToNextClue(4)">完成寻宝</button>
+            <h1>🌸 第三关 🌸</h1>
+            <p>最后一步啦！去学校附近的糖水店（君记甜铺-糖水-小吃-简食），礼物兑换码是<strong>0211 6337 8191</strong>。4.7号到期哦</p>
+            <div class="file-upload">
+                <input type="file" id="fileInput3" accept="image/*" hidden>
+                <label for="fileInput3" class="upload-label">🍧 上传糖水照片</label>
+            </div>
+            <button class="btn" id="unlockButton3" disabled>完成验证</button>
         </div>
     </div>
 
     <!-- 最终页 -->
-    <div id="modal4" class="modal">
+    <div class="modal" id="modal4">
         <div class="modal-content">
-            <h1>恭喜完成！</h1>
-            <p>希望你喜欢这次寻宝之旅...</p>
-            <button class="unlock-button" onclick="closeAllModals()">关闭</button>
+            <h1>🎉 寻宝完成！</h1>
+            <p>所有惊喜都已解锁！<br>希望你喜欢这次春日寻宝之旅～</p>
+            <button class="btn" onclick="closeAllModals()">关闭</button>
         </div>
     </div>
 
     <script>
+        // 关卡控制
+        let currentLevel = 1;
+
         // 模态框控制
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'block';
+        function showModal(level) {
+            closeAllModals();
+            document.getElementById(`modal${level}`).style.display = 'flex';
         }
 
         function closeAllModals() {
@@ -193,31 +227,39 @@
             });
         }
 
-        // 关卡切换
-        function goToNextClue(clueNumber) {
-            closeAllModals();
-            if (clueNumber <= 4) {
-                openModal('modal' + clueNumber);
-            }
+        // 文件上传处理
+        function handleFileUpload(inputId, buttonId) {
+            const input = document.getElementById(inputId);
+            const button = document.getElementById(buttonId);
+            
+            input.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    button.disabled = false;
+                    button.textContent = '解锁下一关';
+                    button.onclick = () => {
+                        currentLevel++;
+                        showModal(currentLevel);
+                    }
+                }
+            });
         }
 
-        // 事件绑定
-        document.getElementById('startButton').addEventListener('click', () => {
-            openModal('modal1');
-        });
+        // 初始化
+        document.getElementById('startButton').addEventListener('click', () => showModal(1));
+        handleFileUpload('fileInput1', 'unlockButton1');
+        handleFileUpload('fileInput2', 'unlockButton2');
+        handleFileUpload('fileInput3', 'unlockButton3');
 
-        // 文件上传反馈
-        [1,2,3].forEach(num => {
-            document.getElementById(`fileInput${num}`).addEventListener('change', function() {
-                document.getElementById(`unlockButton${num}`).style.display = 'block';
-            });
-        });
-
-        // 点击外部关闭
+        // 点击背景关闭
         window.addEventListener('click', (e) => {
             if (e.target.classList.contains('modal')) {
                 closeAllModals();
             }
+        });
+
+        // 最终关特殊处理
+        document.getElementById('unlockButton3').addEventListener('click', () => {
+            showModal(4);
         });
     </script>
 </body>
