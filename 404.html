@@ -1,130 +1,156 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>春日寻宝之旅</title>
     <style>
-        body {
-            font-family: "Arial", sans-serif;
-            background-image: url('background.jpg'); /* 玉兰花背景图片[^35^] */
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
+        /* 基础重置 */
+        * {
             margin: 0;
             padding: 0;
-            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* 容器样式 */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #fff1eb 0%, #ace0f9 100%);
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        /* 标题样式 */
         h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            color: #e74c3c;
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            position: relative;
         }
-        p {
+
+        h1::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: #FFB3C6;
+            margin: 1rem auto;
+        }
+         p {
             font-size: 1.2rem;
             margin-bottom: 2rem;
+            color: #e74c3c;
+            position: relative;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
-        button {
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
-            background-color: #4CAF50;
+
+        /* 按钮样式 */
+        #startButton {
+            background: linear-gradient(135deg, #FFB3C6, #C8E6C9);
             color: white;
+            padding: 1rem 2rem;
             border: none;
-            border-radius: 5px;
+            border-radius: 30px;
+            font-size: 1.1rem;
             cursor: pointer;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 200px;
+            transition: transform 0.2s;
         }
-        button:hover {
-            background-color: #45a049;
-        }
+
+        /* 模态框样式 */
         .modal {
             display: none;
             position: fixed;
-            z-index: 1;
-            left: 0;
             top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            z-index: 1000;
         }
+
         .modal-content {
-            background-color: rgba(255, 255, 255, 0.95);
-            margin: 15% auto;
-            padding: 2rem;
-            border: 1px solid #888;
-            width: 80%;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            max-width: 400px;
+            margin: 20px auto;
+            position: relative;
         }
-        .modal-content h2 {
-            color: #4CAF50;
-            margin-bottom: 1rem;
-        }
-        .modal-content p {
-            font-size: 1.1rem;
-            color: #333;
-            margin-bottom: 1.5rem;
-        }
+
+        /* 文件上传样式 */
         .file-upload {
-            margin-top: 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+            border: 2px dashed #FFB3C6;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
         }
-        .file-upload input[type="file"] {
-            display: none;
-        }
+
         .file-upload label {
-            padding: 0.5rem 1rem;
-            background-color: #4CAF50;
+            color: #e74c3c;
+            border: none;
+            font-weight: 500;
+            display: block;
+            cursor: pointer;
+        }
+
+        .unlock-button {
+            background: #FFB3C6;
             color: white;
             border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s;
-        }
-        .file-upload label:hover {
-            background-color: #45a049;
-        }
-        .unlock-button {
-            display: none;
+            border-radius: 15px;
+            padding: 1rem;
+            width: 100%;
             margin-top: 1rem;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>春日寻宝之旅</h1>
-    <p>亲爱的今天头油了嘛女士，你收到了一个神秘的寻宝邀请！<br>点击开始，跟随线索，发现隐藏的惊喜吧！</p>
-    <button id="startButton">开始寻宝</button>
+    <!-- 主容器 -->
+    <div class="container">
+        <h1>🌸 春日寻宝计划 🌸</h1>
+             <p> 亲爱的今天头油了嘛女士，你收到了一个神秘的寻宝邀请！<br>点击开始，跟随线索，发现隐藏的惊喜吧！</p>
+        <button id="startButton">开启礼物</button>
+    </div>
 
-    <!-- Modal for the first clue -->
+    <!-- 第1关 -->
     <div id="modal1" class="modal">
         <div class="modal-content">
-            <h2>第一关</h2>
-            <p>在学校附近的花店（樱之花花坊），有一份特别的礼物在等你，凭借BLOSSOMCARD2025兑换。<br>找到它，并上传照片来解锁下一关！</p>
+            <h1>🌸 第一关 🌸</h1>
+            
+            <p>在广西外国语学院附近的花店（遇见Sweet smile_五合店），有一份特别的礼物在等你，礼物兑换码是0204 1405 0532。4.7号到期哦！</p>
             <div class="file-upload">
                 <input type="file" id="fileInput1" accept="image/*">
-                <label for="fileInput1">上传鲜花照片</label>
+                <label for="fileInput1">上传礼物照片</label>
             </div>
             <button id="unlockButton1" class="unlock-button" onclick="goToNextClue(2)">解锁下一关</button>
         </div>
     </div>
 
-    <!-- Modal for the second clue -->
+    <!-- 第2关 -->
     <div id="modal2" class="modal">
         <div class="modal-content">
-            <h2>第二关</h2>
-            <p>太棒了！接下来去学校附近的奶茶店（古茗），那里有一杯为你准备的奶茶,凭借MILK_TEACARD2025兑换。<br>拍下照片，继续解锁下一关！</p>
+            <h1>🌸 第二关 🌸</h1>
+            <p>太棒了！接下来去学校附近的奶茶店（古茗），有一份特别的礼物在等你，礼物兑换码是0204 8203 0430。3.15号到期哦！</p>
             <div class="file-upload">
                 <input type="file" id="fileInput2" accept="image/*">
                 <label for="fileInput2">上传奶茶照片</label>
@@ -133,86 +159,66 @@
         </div>
     </div>
 
-    <!-- Modal for the third clue -->
+    <!-- 第3关 -->
     <div id="modal3" class="modal">
         <div class="modal-content">
-            <h2>第三关</h2>
-            <p>最后一步啦！去学校附近的甜品店（甜蜜心点），那里有一份美味的小蛋糕，凭借CAKECARD2025兑换。<br>拍下照片，完成最后的寻宝！</p>
+            <h1>🌸 第三关 🌸</h1>
+            <p>最后一步啦！去学校附近的糖水店（君记甜铺-糖水-小吃-简食），礼物兑换码是0211 6337 8191。4.7号到期哦</p>
             <div class="file-upload">
                 <input type="file" id="fileInput3" accept="image/*">
-                <label for="fileInput3">上传甜品照片</label>
+                <label for="fileInput3">上传糖水照片</label>
             </div>
             <button id="unlockButton3" class="unlock-button" onclick="goToNextClue(4)">完成寻宝</button>
         </div>
     </div>
 
-    <!-- Modal for the final message -->
+    <!-- 最终页 -->
     <div id="modal4" class="modal">
         <div class="modal-content">
-            <h2>恭喜你完成寻宝！</h2>
-            <p>亲爱的今天头油了嘛女士，希望你喜欢这次神秘的寻宝之旅。<br>这些小礼物是某个人为你精心准备的，希望你能感受到TA的心意。</p>
-            <button onclick="closeAllModals()">关闭</button>
+            <h1>恭喜完成！</h1>
+            <p>希望你喜欢这次寻宝之旅...</p>
+            <button class="unlock-button" onclick="closeAllModals()">关闭</button>
         </div>
     </div>
 
     <script>
-        // Function to open a specific modal
+        // 模态框控制
         function openModal(modalId) {
-            document.getElementById(modalId).style.display = "block";
+            document.getElementById(modalId).style.display = 'block';
         }
 
-        // Function to close all modals
         function closeAllModals() {
-            document.getElementById("modal1").style.display = "none";
-            document.getElementById("modal2").style.display = "none";
-            document.getElementById("modal3").style.display = "none";
-            document.getElementById("modal4").style.display = "none";
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
         }
 
-        // Function to check if file is uploaded
-        function isFileUploaded(modalNumber) {
-            const fileInput = document.getElementById(`fileInput${modalNumber}`);
-            return fileInput.files.length > 0;
-        }
-
-        // Function to go to the next clue
+        // 关卡切换
         function goToNextClue(clueNumber) {
-            if (isFileUploaded(clueNumber - 1)) {
-                closeAllModals();
-                if (clueNumber === 2) {
-                    openModal("modal2");
-                } else if (clueNumber === 3) {
-                    openModal("modal3");
-                } else if (clueNumber === 4) {
-                    openModal("modal4");
-                }
-            } else {
-                alert("请先上传照片！");
+            closeAllModals();
+            if (clueNumber <= 4) {
+                openModal('modal' + clueNumber);
             }
         }
 
-        // Show unlock button only after file is uploaded
-        document.getElementById("fileInput1").addEventListener("change", function() {
-            document.getElementById("unlockButton1").style.display = "block";
-        });
-        document.getElementById("fileInput2").addEventListener("change", function() {
-            document.getElementById("unlockButton2").style.display = "block";
-        });
-        document.getElementById("fileInput3").addEventListener("change", function() {
-            document.getElementById("unlockButton3").style.display = "block";
+        // 事件绑定
+        document.getElementById('startButton').addEventListener('click', () => {
+            openModal('modal1');
         });
 
-        // Open the first modal when the start button is clicked
-        document.getElementById("startButton").onclick = function() {
-            openModal("modal1");
-        };
+        // 文件上传反馈
+        [1,2,3].forEach(num => {
+            document.getElementById(`fileInput${num}`).addEventListener('change', function() {
+                document.getElementById(`unlockButton${num}`).style.display = 'block';
+            });
+        });
 
-        // Close all modals when clicking outside
-        window.onclick = function(event) {
-            if (event.target.classList.contains("modal")) {
+        // 点击外部关闭
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
                 closeAllModals();
             }
-        };
+        });
     </script>
 </body>
 </html>
